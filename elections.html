@@ -1,0 +1,69 @@
+{# templates/admin/elections.html #}
+{% extends "base.html" %}
+{% block title %}Manage Elections{% endblock %}
+{% block content %}
+
+<div class="container mt-4">
+    <h2>Manage Elections</h2>
+
+    <div class="card mb-4">
+        <div class="card-body">
+            <h5 class="card-title">Create New Election</h5>
+            <form method="POST">
+                <div class="mb-3">
+                    <label class="form-label">Title</label>
+                    <input type="text" class="form-control" name="title" required>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Description</label>
+                    <textarea class="form-control" name="description" required></textarea>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Start Date</label>
+                    <input type="datetime-local" class="form-control" name="start_date" required>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">End Date</label>
+                    <input type="datetime-local" class="form-control" name="end_date" required>
+                </div>
+
+                <button type="submit" class="btn btn-primary">Create Election</button>
+            </form>
+        </div>
+    </div>
+
+    <h3>Current Elections</h3>
+    <div class="row">
+        {% for election in elections %}
+        <div class="col-md-6 mb-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">{{ election[1] }}</h5>
+                    <p>{{ election[2] }}</p>
+                    <p class="small">
+                        Starts: {{ election[3].strftime('%Y-%m-%d %H:%M') }}<br>
+                        Ends: {{ election[4].strftime('%Y-%m-%d %H:%M') }}
+                    </p>
+                    <div class="btn-group">
+                        <a href="{{ url_for('manage_candidates', election_id=election[0]) }}" class="btn btn-primary">
+                            Manage Candidates
+                        </a>
+                        <form method="POST" action="{{ url_for('toggle_election', election_id=election[0]) }}" class="d-inline">
+                            {% if election[5] %}
+                            <button type="submit" class="btn btn-warning">Deactivate</button>
+                            {% else %}
+                            <button type="submit" class="btn btn-success">Activate</button>
+                            {% endif %}
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock %}

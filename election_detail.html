@@ -1,0 +1,39 @@
+{# templates/election_detail.html #}
+{% extends "base.html" %}
+{% block title %}{{ election[1] }}{% endblock %}
+{% block content %}
+
+<div class="container mt-4">
+    <h2>{{ election[1] }}</h2>
+    
+    <p>{{ election[2] }}</p>
+
+    <div class="row mt-4">
+        {% for candidate in candidates %}
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="card-title">{{ candidate[2] }}</h5>
+                    <p>{{ candidate[3] }}</p>
+
+                    {% if not user_vote and election[5] and now() < election[4] %}
+                    <form action="{{ url_for('vote') }}" method="POST">
+                        <input type="hidden" name="election_id" value="{{ election[0] }}">
+                        <input type="hidden" name="candidate_id" value="{{ candidate[0] }}">
+                        <button type="submit" class="btn btn-primary">Vote</button>
+                    </form>
+                    {% elif user_vote and user_vote[0] == candidate[0] %}
+                    <div class="alert alert-success mt-3">
+                        You voted for this candidate
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock %} 
+
+

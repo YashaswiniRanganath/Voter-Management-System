@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<h1>Active Elections</h1>
+{% if elections %}
+    <div class="row">
+        {% for election in elections %}
+        <div class="col-md-4 mb-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">{{ election[1] }}</h5>
+                    <p class="card-text">{{ election[2] }}</p>
+                    <p class="card-text">
+                        <small class="text-muted">
+                            Ends: {{ election[4].strftime('%Y-%m-%d %H:%M') }}
+                        </small>
+                    </p>
+                    <a href="{{ url_for('election_detail', election_id=election[0]) }}" 
+                       class="btn btn-primary">View Details</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <p>No active elections at the moment.</p>
+{% endif %}
+{% endblock %}

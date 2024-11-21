@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title %}Election Results - {{ election.title }}{% endblock %}
+{% block content %}
+<div class="container mt-4">
+    <h2>{{ election.title }} - Results</h2>
+    <p>{{ election.description }}</p>
+    
+    <div class="card mb-4">
+        <div class="card-body">
+            <h5 class="card-title">Voting Statistics</h5>
+            <p class="mb-1">Total Votes Cast: {{ total_voters }}</p>
+            <p class="mb-1">Eligible Voters: {{ total_eligible }}</p>
+            <p>Voter Turnout: {{ "%.1f"|format(total_voters/total_eligible*100) }}%</p>
+        </div>
+    </div>
+
+    <div class="row">
+        {% for result in results %}
+        <div class="col-md-6 mb-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">{{ result.name }}</h5>
+                    <p class="card-text">{{ result.description }}</p>
+                    
+                    <div class="progress mb-3">
+                        <div class="progress-bar" 
+                             role="progressbar" 
+                             style="width:  result vote_percentage/round/int "
+                             aria-valuenow="{{ result.vote_percentage|round|int }}" 
+                             aria-valuemin="0" 
+                             aria-valuemax="100">
+                            {{ result.vote_percentage|round|int }}%
+                        </div>
+                    </div>
+                    
+                    <p class="mb-0">Total Votes: {{ result.vote_count }}</p>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
